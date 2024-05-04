@@ -39,3 +39,23 @@ class MarkdownConverter:
 
     def apply_paragraphs(self):
         self.markdown_content = re.sub(r'(?<=\S)\n{2,}(?=\S)|\n\n(?=\S)', r'</p>\n<p>', self.markdown_content)
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python convert_markdown.py <input_file> [--out <output_file>]")
+        sys.exit(1)
+
+    input_text_file = sys.argv[1]
+    output_text_file = None
+
+    if len(sys.argv) > 2 and sys.argv[2] == "--out" and len(sys.argv) > 3:
+        output_text_file = sys.argv[3]
+
+    converter = MarkdownConverter(input_text_file)
+    html_text = converter.convert_to_html()
+
+    if output_text_file:
+        with open(output_text_file, 'w', encoding='utf-8') as f:
+            f.write(html_text)
+    else:
+        print(html_text)
